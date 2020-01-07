@@ -1,6 +1,6 @@
 <?php
 /*
-   Plugin Name: GC Assess Practice
+   Plugin Name: Master GC Assess Practice
    Version: 1.0.0
    Author: Global Cognition
    Author URI: https://www.globalcognition.org
@@ -36,7 +36,6 @@ function gc_assess_prac_enqueue_scripts() {
           $comp_num = 2;
           $task_num = 9;
           $data_for_js = pull_data_cpts($comp_num,$task_num);
-          d($data_for_js);
 
           wp_localize_script('gcap-main-js', 'exObj', $data_for_js);
 

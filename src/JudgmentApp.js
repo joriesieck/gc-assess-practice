@@ -31,12 +31,17 @@ class JudgmentApp extends Component {
             allDone: false,
             rationales: []
         };
+        this.levelTitles = {
+            1: "Less Skilled",
+            2: "Proficient",
+            3: "Master"};
     }
 
     handleChoice(option) {
-
-        const actual = exObj.exGoldLevels[this.state.exId];
+        const actualNum = exObj.exGoldLevels[this.state.exId];
+        const actual = this.levelTitles[actualNum];
         let correct = 0;
+        console.log(actual);
         if ( option === actual ) {
             correct = 1;
         }
@@ -139,7 +144,10 @@ console.log(rationale.length);
                         exemplar={ exObj.exemplars[this.state.exId] }
                     /> }
                 { (!this.state.ratVisible && !this.state.fbVisible) &&
-                    <Options handleChoice={this.handleChoice}/>
+                    <Options 
+                        handleChoice={this.handleChoice}
+                        levelTitles={this.levelTitles}
+                    />
                 }
                 {this.state.ratVisible &&
                     <Rationale
@@ -150,8 +158,9 @@ console.log(rationale.length);
                 { (this.state.fbVisible && !this.state.allDone) &&
                     <ShowFeedback
                         choice={ this.state.choice }
-                        actual={ exObj.exGoldLevels[this.state.exId] }
+                        actual={ this.levelTitles[exObj.exGoldLevels[this.state.exId]] }
                         handleNext={ this.handleNext }
+                        correctRationale={exObj.exGoldRationales[this.state.exId]}
                     /> }
             </div>
         );

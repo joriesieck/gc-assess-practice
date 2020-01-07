@@ -3,13 +3,13 @@ import Option from './Option';
 const Options = (props) => {
     return (
         <div>
-            <Option optionText={'low'}
+            <Option optionText={props.levelTitles[1]}
                     handleChoice={ props.handleChoice }
             />
-            <Option optionText={'medium'}
+            <Option optionText={props.levelTitles[2]}
                     handleChoice={ props.handleChoice }
             />
-            <Option optionText={'high'}
+            <Option optionText={props.levelTitles[3]}
                     handleChoice={ props.handleChoice }
             />
         </div>
