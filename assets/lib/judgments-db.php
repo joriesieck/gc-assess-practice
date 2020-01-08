@@ -76,7 +76,7 @@ function pull_data_cpts($comp_num, $task_num) {
     foreach ($exemplars as $exemplar) {
         $ex_id = $exemplar->ID;
         $ex_ids[] = $ex_id;
-        $ex_contents[$ex_id] = $exemplar->post_content;
+        $ex_contents[$ex_id] = trim($exemplar->post_content, '""');
         $exemplar_gold_levels[$ex_id] = get_field("gold_level", $ex_id, false);
         $ex_gold_rationales[$ex_id] = get_field("gold_rationale",$ex_id);
     }
@@ -88,7 +88,7 @@ function pull_data_cpts($comp_num, $task_num) {
     );
 
     $scenario = get_posts($s_args);
-    $s_content = $scenario[0]->post_content;
+    $s_content = trim($scenario[0]->post_content, '""');
     $s_title = $scenario[0]->post_title;
 
     $c_args = array(
@@ -100,7 +100,7 @@ function pull_data_cpts($comp_num, $task_num) {
     $competencies = get_posts($c_args);
     foreach ($competencies as $competency) {
         $j = get_field('comp_part',$competency->ID);
-        $c_defs[$j] = $competency->post_content;
+        $c_defs[$j] = trim($competency->post_content, '""');
         $c_titles[$j] = $competency->post_title;
     }
 

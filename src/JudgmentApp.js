@@ -46,7 +46,7 @@ class JudgmentApp extends Component {
         const endDate = Date.now();
         const endTime = Math.floor(endDate / 1000);
         const totalTime = endTime - this.state.startTime;
-        console.log(totalTime);
+        //console.log(totalTime);
         
         // Get the correct answer
         const actualNum = exObj.exGoldLevels[this.state.exId];
@@ -54,7 +54,7 @@ class JudgmentApp extends Component {
 
         // Determine whether user was correct
         let correct = 0;
-        console.log(this.levelTitles[actualNum]);
+        //console.log(this.levelTitles[actualNum]);
         if ( option === actual ) {
             correct = 1;
         }
@@ -87,7 +87,7 @@ class JudgmentApp extends Component {
                 ratVisible: false
             };
         });
-console.log(rationale.length);
+//console.log(rationale.length);
     }
     
     handleNext() {
@@ -110,7 +110,7 @@ console.log(rationale.length);
             // alert("All done");
         }
         
-        console.log(this.state.totalTime);
+        //console.log(this.state.totalTime);
         // save to DB
         jQuery.ajax({
             url : exObj.ajax_url,

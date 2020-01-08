@@ -32,13 +32,17 @@ function gc_assess_prac_enqueue_scripts() {
               time(),
               true
           );
-
-          $comp_num = 2;
-          $task_num = 9;
+          
+          $comp_task_num = sanitize_text_field(get_query_var('comp_task_num'));
+          list($comp_num, $task_num) = explode(",", $comp_task_num);
           $data_for_js = pull_data_cpts($comp_num,$task_num);
           $start_time = time();
-          $comp_task = array('compNum' => $comp_num, 'taskNum' => $task_num, 'startTime' => $start_time);
-          $data_for_js = array_merge($data_for_js,$comp_task);
+          $other_data = array(
+              'compNum' => $comp_num,
+              'taskNum' => $task_num,
+              'startTime' => $start_time
+            );
+          $data_for_js = array_merge($data_for_js,$other_data);
         // pass exemplars, scenarios, and competencies to Judgment App
           wp_localize_script('gcap-main-js', 'exObj', $data_for_js);
 
@@ -86,6 +90,13 @@ function gcap_add_scores( ) {
 
 }
 add_action( 'wp_ajax_gcap_add_scores', 'gcap_add_scores' );
+
+// Add comp_num and task_num to url, formatted as 'comp_num,task_num'
+function comp_task_query_vars( $qvars ) {
+    $qvars[] = 'comp_task_num';
+    return $qvars;
+}
+add_filter( 'query_vars', 'comp_task_query_vars' );
 
 // Genesis activation hook - if statement in function has it run only on a given page
 add_action('wp_ajax_save_data','save_data');
