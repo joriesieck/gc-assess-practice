@@ -89,6 +89,7 @@ function pull_data_cpts($comp_num, $task_num) {
 
     $scenario = get_posts($s_args);
     $s_content = $scenario[0]->post_content;
+    $s_title = $scenario[0]->post_title;
 
     $c_args = array(
         'post_type' => 'competency',
@@ -100,13 +101,16 @@ function pull_data_cpts($comp_num, $task_num) {
     foreach ($competencies as $competency) {
         $j = get_field('comp_part',$competency->ID);
         $c_defs[$j] = $competency->post_content;
+        $c_titles[$j] = $competency->post_title;
     }
 
     $data_for_js = array(
         'ajax_url' => admin_url('admin-ajax.php'),
         'nonce' => wp_create_nonce('gcap_scores_nonce'),
         'sContent' => $s_content,
+        'sTitle' => $s_title,
         'cDefinitions' => $c_defs,
+        'cTitles' => $c_titles,
         'exIds' => $ex_ids,
         'exemplars' => $ex_contents,
         'exGoldLevels' => $exemplar_gold_levels,

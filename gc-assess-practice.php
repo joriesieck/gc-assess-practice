@@ -19,7 +19,7 @@ register_activation_hook(__FILE__,'gcap_create_table'); // this function call ha
 
 function gc_assess_prac_enqueue_scripts() {
 
-  if( is_page( 'react-in-wp' ) ) {
+  if( is_page( 'competency-assessment-practice' ) ) {
 
       global $current_user;
       get_currentuserinfo();
@@ -36,7 +36,10 @@ function gc_assess_prac_enqueue_scripts() {
           $comp_num = 2;
           $task_num = 9;
           $data_for_js = pull_data_cpts($comp_num,$task_num);
-
+          $start_time = time();
+          $comp_task = array('compNum' => $comp_num, 'taskNum' => $task_num, 'startTime' => $start_time);
+          $data_for_js = array_merge($data_for_js,$comp_task);
+        // pass exemplars, scenarios, and competencies to Judgment App
           wp_localize_script('gcap-main-js', 'exObj', $data_for_js);
 
       } else {
@@ -85,45 +88,42 @@ function gcap_add_scores( ) {
 add_action( 'wp_ajax_gcap_add_scores', 'gcap_add_scores' );
 
 // Genesis activation hook - if statement in function has it run only on a given page
-add_action('genesis_before_content','save_data');
+add_action('wp_ajax_save_data','save_data');
 /*
  * Calls the insert function from the class judg_db to insert exemplar data into the table
  */
 function save_data() {
-    $page_slug = 'judgment-test';
-    // test data
-    $comp_num = 2;
-    $task_num = 9;
-    $learner_level = 1;
-    $learner_rationale = 'i chose this for a reason';
-    $judg_time = '2:00:00';
+    check_ajax_referer('gcap_scores_nonce');
     global $current_user;
-    if(is_page($page_slug)) {
-        $db = new judg_db;
-        $cpt_data = pull_data_cpts($comp_num,$task_num);
-        for ($i=0;$i<sizeof($cpt_data['exIds']);$i++) {
-            $ex_id = $cpt_data['exIds'][$i];
-            $gold_level = $cpt_data['exGoldLevels'][$ex_id];
-            if($learner_level==$gold_level){
-                $judg_corr = 1;
-            } else {
-                $judg_corr = 0;
-            }
-            $db_data = array(
-                'learner_id' => $current_user->ID,
-                'trial_num' => $i+1,
-                'comp_num' => $comp_num,
-                'task_num' => $task_num,
-                'ex_title' => get_the_title($ex_id),
-                'learner_level' => $learner_level,
-                'gold_level' => $gold_level,
-                'judg_corr' => $judg_corr,
-                'judg_time'  => $judg_time,
-                'learner_rationale' => $learner_rationale,
-            );
-            $db->insert($db_data);
-        }
+    $db = new judg_db;
+    // Get data from React components
+    $trial_num = $_POST['trial_num'];
+    $comp_num = $_POST['comp_num'];
+    $task_num = $_POST['task_num'];
+    $ex_id = $_POST['ex_id'];
+    $learner_level = $_POST['learner_level'];
+    $gold_level = $_POST['gold_level'];
+    $judg_corr = $_POST['judg_corr'];
+    $judg_time = $_POST['judg_time'];
+    $learner_rationale = $_POST['learner_rationale'];
+
+    if($judg_time>=60) {
+        $judg_time = date("H:i:s", mktime(0, 0, $judg_time));
     }
+
+    $db_data = array(
+        'learner_id' => $current_user->ID,
+        'trial_num' => $trial_num,
+        'comp_num' => $comp_num,
+        'task_num' => $task_num,
+        'ex_title' => get_the_title($ex_id),
+        'learner_level' => $learner_level,
+        'gold_level' => $gold_level,
+        'judg_corr' => $judg_corr,
+        'judg_time'  => $judg_time,
+        'learner_rationale' => $learner_rationale,
+    );
+    $db->insert($db_data);
 }
 
 

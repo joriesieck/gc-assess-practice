@@ -28,26 +28,51 @@ function PresentContext(props) {
         <div className={classes.root}>
             <ExpansionPanel>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography className={classes.heading}>Problem Statement</Typography>
+                    <Typography className={classes.heading}>Task: {props.sTitle}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Typography className={classes.heading}>
-                        Please write a paragraph of <em>Lorem ipsum</em> from memory
+                        {props.scenario}
                     </Typography>
                 </ExpansionPanelDetails>
             </ExpansionPanel>
             <ExpansionPanel>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography className={classes.heading}>Rubric Definition</Typography>
+                    <Typography className={classes.heading}>Comp: {props.cTitle}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Typography className={classes.heading}>
-                        The rubric defines the quality of the Lorem Ipsum produced.
-                        <ul>
-                            <li>Low response will have indicators of bland Lorem ipsum</li>
-                            <li>Mid level response will be better than the low level response, but not as good as the high level response </li>
-                            <li>High level response show truly inspired Lorem ipsum</li>
-                        </ul>
+                        {props.competencies[4]}
+                    </Typography>
+                </ExpansionPanelDetails>
+            </ExpansionPanel>
+            <ExpansionPanel>
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography className={classes.heading}>{props.levelTitles[3]}</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                    <Typography className={classes.heading}>
+                        {props.competencies[3]}
+                    </Typography>
+                </ExpansionPanelDetails>
+            </ExpansionPanel>
+            <ExpansionPanel>
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography className={classes.heading}>{props.levelTitles[2]}</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                    <Typography className={classes.heading}>
+                        {props.competencies[2]}
+                    </Typography>
+                </ExpansionPanelDetails>
+            </ExpansionPanel>
+            <ExpansionPanel>
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography className={classes.heading}>{props.levelTitles[1]}</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                    <Typography className={classes.heading}>
+                        {props.competencies[1]}
                     </Typography>
                 </ExpansionPanelDetails>
             </ExpansionPanel>
