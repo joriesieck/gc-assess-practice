@@ -25,10 +25,11 @@ class Rationale extends Component {
     render() {
         return (
             <div id="rationale">
-                <p>You chose: <b>{this.props.choice}</b> </p>
+                <p>You chose: <b>{this.props.choice}</b> <br />
+                    The correct answer is: <b>{this.props.levelTitles[this.props.actual]}</b></p>
                 {this.state.error && <p>{this.state.error}</p>}
                 <form onSubmit={this.handleRationaleObj}>
-                    <span>Please explain your choice:</span>
+                    <span>Please explain why the above answer is correct:</span>
                     <textarea name="rationale" cols={40} rows={5} maxLength={1000} required placeholder={"500 characters or less"} />
                     <button className="button">Enter Rationale</button>
                 </form>

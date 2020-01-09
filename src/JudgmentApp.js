@@ -17,22 +17,25 @@ class JudgmentApp extends Component {
         super(props);
         this.handleChoice = this.handleChoice.bind(this);
         this.handleRationale = this.handleRationale.bind(this);
+        this.handleSelfAssess = this.handleSelfAssess.bind(this);
         this.handleNext = this.handleNext.bind(this);
         this.getCase = this.getCase.bind(this);
         this.saveResults = this.saveResults.bind(this);
+        const startDate = Date.now();
         this.state = {
             trial: 1,
             exId: exObj.exIds[0],
             choice: null,
             choiceNum: 0,
-            startTime: exObj.startTime,
+            startTime: Math.floor(startDate / 1000),
             totalTime: 0,
             fbVisible: false,
             ratVisible: false,
             scores: [],
             accuracy: 0,
             allDone: false,
-            rationales: []
+            rationales: [],
+            selfAssess: 1
         };
         this.levelTitles = {
             1: "Less Skilled",
@@ -65,7 +68,6 @@ class JudgmentApp extends Component {
                 choice: option,
                 choiceNum: optionNum,
                 totalTime: totalTime,
-                // fbVisible: true,
                 ratVisible: true,
                 scores: prevState.scores.concat(correct)
             };
@@ -89,12 +91,21 @@ class JudgmentApp extends Component {
         });
 //console.log(rationale.length);
     }
+
+    handleSelfAssess(choice) {
+        this.setState(() => {
+            return {
+                selfAssess: choice
+            };
+        });
+    }
     
     handleNext() {
         if (this.state.trial < nTrials) {
             this.setState((prevState) => {
                 return {
                     trial: prevState.trial + 1
+                    //selfAssess: choice
                 };
             },
                 this.getCase
@@ -105,6 +116,7 @@ class JudgmentApp extends Component {
                 return {
                     allDone: true,
                     accuracy: response
+                    //selfAssess: choice
                 };
             });
             // alert("All done");
@@ -126,6 +138,7 @@ class JudgmentApp extends Component {
                 judg_corr: this.state.scores[this.state.trial-1],
                 judg_time: this.state.totalTime,
                 learner_rationale: this.state.rationales[this.state.trial-1],
+                learner_self_assess: this.state.selfAssess,
                 _ajax_nonce: exObj.nonce
             },
             success : function( response ) {
@@ -206,16 +219,20 @@ class JudgmentApp extends Component {
                 {this.state.ratVisible &&
                     <Rationale
                         choice={ this.state.choice }
+                        actual={exObj.exGoldLevels[this.state.exId]}
+                        levelTitles={this.levelTitles}
                         handleRationale={this.handleRationale}
                     />
                 }
                 { (this.state.fbVisible && !this.state.allDone) &&
                     <ShowFeedback
-                        choice={ this.state.choice }
-                        actual={ this.levelTitles[exObj.exGoldLevels[this.state.exId]] }
+                        rationale={ this.state.rationales[this.state.trial-1] }
+                        actual={ exObj.exGoldRationales[this.state.exId] }
+                        choice={this.state.selfAssess}
+                        handleSelfAssess={this.handleSelfAssess}
                         handleNext={ this.handleNext }
-                        correctRationale={exObj.exGoldRationales[this.state.exId]}
-                    /> }
+                    />
+                }
             </div>
         );
     }

@@ -117,6 +117,7 @@ function save_data() {
     $judg_corr = $_POST['judg_corr'];
     $judg_time = $_POST['judg_time'];
     $learner_rationale = $_POST['learner_rationale'];
+    $learner_self_assess = $_POST['learner_self_assess'];
 
     if($judg_time>=60) {
         $judg_time = date("H:i:s", mktime(0, 0, $judg_time));
@@ -133,6 +134,7 @@ function save_data() {
         'judg_corr' => $judg_corr,
         'judg_time'  => $judg_time,
         'learner_rationale' => $learner_rationale,
+        'learner_self_assess' => $learner_self_assess
     );
     $db->insert($db_data);
 }

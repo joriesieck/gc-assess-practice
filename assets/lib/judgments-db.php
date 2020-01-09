@@ -34,6 +34,7 @@ function gcap_create_table() {
 		judg_corr smallint(1) UNSIGNED NOT NULL,
 	    judg_time time NOT NULL,
 	    learner_rationale longtext NOT NULL,
+        learner_self_assess smallint(1) UNSIGNED NOT NULL,
         PRIMARY KEY (judg_id)
 	) $charset_collate;";
 
