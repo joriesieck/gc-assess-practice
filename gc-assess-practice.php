@@ -36,11 +36,9 @@ function gc_assess_prac_enqueue_scripts() {
           $comp_task_num = sanitize_text_field(get_query_var('comp_task_num'));
           list($comp_num, $task_num) = explode(",", $comp_task_num);
           $data_for_js = pull_data_cpts($comp_num,$task_num);
-          $start_time = time();
           $other_data = array(
               'compNum' => $comp_num,
-              'taskNum' => $task_num,
-              'startTime' => $start_time
+              'taskNum' => $task_num
             );
           $data_for_js = array_merge($data_for_js,$other_data);
         // pass exemplars, scenarios, and competencies to Judgment App
@@ -117,10 +115,14 @@ function save_data() {
     $judg_corr = $_POST['judg_corr'];
     $judg_time = $_POST['judg_time'];
     $learner_rationale = $_POST['learner_rationale'];
-    $learner_self_assess = $_POST['learner_self_assess'];
+    $ration_match = $_POST['ration_match'];
+    $ration_time = $_POST['ration_time'];
 
     if($judg_time>=60) {
         $judg_time = date("H:i:s", mktime(0, 0, $judg_time));
+    }
+    if($ration_time>=60) {
+        $ration_time = date("H:i:s", mktime(0, 0, $ration_time));
     }
 
     $db_data = array(
@@ -134,7 +136,8 @@ function save_data() {
         'judg_corr' => $judg_corr,
         'judg_time'  => $judg_time,
         'learner_rationale' => $learner_rationale,
-        'learner_self_assess' => $learner_self_assess
+        'ration_match' => $ration_match,
+        'ration_time' => $ration_time
     );
     $db->insert($db_data);
 }

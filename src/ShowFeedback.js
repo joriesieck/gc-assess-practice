@@ -1,4 +1,6 @@
 import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const { Component } = wp.element;
 
@@ -28,22 +30,45 @@ class ShowFeedback extends Component {
         return (
             <div>
                 <p>You wrote: <br />
-                    {this.props.rationale} <br />
-                    The correct reasoning for this case is: <br />
+                    {this.props.rationale} <br /> <br />
+                    The gold standard for this case is: <br />
                     {this.props.actual}
                 </p>
-                <p>Rate how you think your reasoning compares:</p>
+                <p>Rate how well your rationale matches the gold standard:</p>
                 <div>
-                <Radio name="1" value="1" 
-                    checked={this.state.selectedValue === "1"} onChange={this.handleChange}/> 1
-                <Radio name="2" value="2" 
-                    checked={this.state.selectedValue === "2"} onChange={this.handleChange}/> 2
-                <Radio name="3" value="3" 
-                    checked={this.state.selectedValue === "3"} onChange={this.handleChange}/> 3
-                <Radio name="4" value="4" 
-                    checked={this.state.selectedValue === "4"} onChange={this.handleChange}/> 4
-                <Radio name="5" value="5" 
-                    checked={this.state.selectedValue === "5"} onChange={this.handleChange}/> 5
+                <RadioGroup name="rating" value={this.state.selectedValue} onChange={this.handleChange} row>
+                    <FormControlLabel
+                        value="1"
+                        control={<Radio />}
+                        label="1 - low match"
+                        labelPlacement="bottom"
+                    />
+                    <FormControlLabel
+                        value="2"
+                        control={<Radio />}
+                        label="2"
+                        labelPlacement="bottom"
+                    />
+                    <FormControlLabel
+                        value="3"
+                        control={<Radio />}
+                        label="3"
+                        labelPlacement="bottom"
+                    />
+                    <FormControlLabel
+                        value="4"
+                        control={<Radio />}
+                        label="4"
+                        labelPlacement="bottom"
+                    />
+                    <FormControlLabel
+                        value="5"
+                        control={<Radio />}
+                        label="5 - high match"
+                        labelPlacement="bottom"
+                    />
+                </RadioGroup>
+
                 </div>
                 <br />
                 <br />

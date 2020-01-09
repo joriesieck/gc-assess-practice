@@ -29,7 +29,7 @@ class Rationale extends Component {
                     The correct answer is: <b>{this.props.levelTitles[this.props.actual]}</b></p>
                 {this.state.error && <p>{this.state.error}</p>}
                 <form onSubmit={this.handleRationaleObj}>
-                    <span>Please explain why the above answer is correct:</span>
+                    <span>Please explain why this response is <b>{this.props.levelTitles[this.props.actual]}</b>:</span>
                     <textarea name="rationale" cols={40} rows={5} maxLength={1000} required placeholder={"500 characters or less"} />
                     <button className="button">Enter Rationale</button>
                 </form>

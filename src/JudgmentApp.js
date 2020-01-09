@@ -28,7 +28,9 @@ class JudgmentApp extends Component {
             choice: null,
             choiceNum: 0,
             startTime: Math.floor(startDate / 1000),
-            totalTime: 0,
+            judgTime: 0,
+            rationStart: 0,
+            rationTime: 0,
             fbVisible: false,
             ratVisible: false,
             scores: [],
@@ -48,7 +50,7 @@ class JudgmentApp extends Component {
         // Calculate time from task load to option selected
         const endDate = Date.now();
         const endTime = Math.floor(endDate / 1000);
-        const totalTime = endTime - this.state.startTime;
+        const judgTime = endTime - this.state.startTime;
         //console.log(totalTime);
         
         // Get the correct answer
@@ -67,7 +69,8 @@ class JudgmentApp extends Component {
             return {
                 choice: option,
                 choiceNum: optionNum,
-                totalTime: totalTime,
+                judgTime: judgTime,
+                rationStart: endTime,
                 ratVisible: true,
                 scores: prevState.scores.concat(correct)
             };
@@ -82,8 +85,14 @@ class JudgmentApp extends Component {
         else if (rationale.length > 500) {
             return "Trim your rationale down to 500 characters";
         }
+        // Calculate time from task load to rationale submitted
+        const endDate = Date.now();
+        const endTime = Math.floor(endDate / 1000);
+        const rationTime = endTime - this.state.rationStart;
+
         this.setState(prevState => {
             return {
+                rationTime: rationTime,
                 rationales: prevState.rationales.concat(rationale),
                 fbVisible: true,
                 ratVisible: false
@@ -105,7 +114,6 @@ class JudgmentApp extends Component {
             this.setState((prevState) => {
                 return {
                     trial: prevState.trial + 1
-                    //selfAssess: choice
                 };
             },
                 this.getCase
@@ -116,11 +124,12 @@ class JudgmentApp extends Component {
                 return {
                     allDone: true,
                     accuracy: response
-                    //selfAssess: choice
                 };
             });
             // alert("All done");
         }
+
+        
         
         //console.log(this.state.totalTime);
         // save to DB
@@ -136,9 +145,10 @@ class JudgmentApp extends Component {
                 learner_level: this.state.choiceNum,
                 gold_level: exObj.exGoldLevels[this.state.exId],
                 judg_corr: this.state.scores[this.state.trial-1],
-                judg_time: this.state.totalTime,
+                judg_time: this.state.judgTime,
                 learner_rationale: this.state.rationales[this.state.trial-1],
-                learner_self_assess: this.state.selfAssess,
+                ration_match: this.state.selfAssess,
+                ration_time: this.state.rationTime,
                 _ajax_nonce: exObj.nonce
             },
             success : function( response ) {
