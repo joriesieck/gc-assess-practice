@@ -5,25 +5,18 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 const { Component } = wp.element;
 
 class ShowFeedback extends Component {
-    constructor(props) {
-        super(props);
-        this.handleChange = this.handleChange.bind(this);
-        this.ratings = ["1", "2", "3", "4", "5"];
-        this.state = {
-            selectedValue: "1"
-        };
-    };
+    state = {selectedValue: "1"};   // Tracks which rating the user has selected
+    /**
+     * handleChange: updates the radio buttons according to the user's selection
+     * Parameter: event, the new button selected
+     * Fires: when the user clicks a new radio button
+     */
+    handleChange = (event) => {
+        event.preventDefault(); // Keep the page from refreshing infinitely
 
-    handleChange(event) {
-        event.preventDefault();
-
-        const choice = event.target.value;
-        this.props.handleSelfAssess(choice);
-        this.setState(() => {
-            return {
-                selectedValue: choice
-            };
-        });
+        const choice = event.target.value;  // Clean the input
+        this.props.handleSelfAssess(choice);    // Call handleSelfAssess from JudgmentApp
+        this.setState(() => ({selectedValue: choice}));   // Update state
     };
 
     render() {
@@ -68,7 +61,6 @@ class ShowFeedback extends Component {
                         labelPlacement="bottom"
                     />
                 </RadioGroup>
-
                 </div>
                 <br />
                 <br />

@@ -13,47 +13,38 @@ import ShowEnd from './ShowEnd';
 const nTrials = exObj.exIds.length;
 
 class JudgmentApp extends Component {
-    constructor( props ) {
-        super(props);
-        this.handleChoice = this.handleChoice.bind(this);
-        this.handleRationale = this.handleRationale.bind(this);
-        this.handleSelfAssess = this.handleSelfAssess.bind(this);
-        this.handleNext = this.handleNext.bind(this);
-        this.getCase = this.getCase.bind(this);
-        this.saveResults = this.saveResults.bind(this);
-        const startDate = Date.now();
-        // Tracks various attributes and their changes as the user moves through the trials
-        this.state = {
-            trial: 1,   // Each judgment is one trial
-            exId: exObj.exIds[0],   // The ID of the Exemplar being judged
-            choice: null,   // Text of the user's judgment
-            choiceNum: 0,   // Number of the user's judgment
-            startTime: Math.floor(startDate / 1000),    // UNIX time on page load
-            judgTime: 0,    // Time from page load to judgment made, in seconds
-            rationStart: 0, // UNIX time on judgment made
-            rationTime: 0,  // Time from judgment made to rationale submitted, in seconds
-            fbVisible: false,   // Whether the 'ShowFeedback' component should be displayed
-            ratVisible: false,  // Whether the 'Rationale' component should be displayed
-            scores: [], // An array of the user's scores, where 0 means incorrect and 1 means correct
-            accuracy: 0,    // The user's total score, as a decimal
-            allDone: false, // Whether the 'ShowEnd' component should be displayed
-            rationales: [], // An array of the user's rationales
-            selfAssess: 1   // The user's rating of how their rationale matches the gold standard
-        };
-        // Labels for Exemplar judgments
-        this.levelTitles = {
-            1: "Less Skilled",
-            2: "Proficient",
-            3: "Master"
-        };
-    }
+    // Tracks various attributes and their changes as the user moves through the trials
+    startDate = Date.now();  // UNIX time on page load
+    state = {
+        trial: 1,   // Each judgment is one trial
+        exId: exObj.exIds[0],   // The ID of the Exemplar being judged
+        choice: null,   // Text of the user's judgment
+        choiceNum: 0,   // Number of the user's judgment
+        startTime: Math.floor(this.startDate / 1000),    // UNIX time on page load, in seconds
+        judgTime: 0,    // Time from page load to judgment made, in seconds
+        rationStart: 0, // UNIX time on judgment made
+        rationTime: 0,  // Time from judgment made to rationale submitted, in seconds
+        fbVisible: false,   // Whether the 'ShowFeedback' component should be displayed
+        ratVisible: false,  // Whether the 'Rationale' component should be displayed
+        scores: [], // An array of the user's scores, where 0 means incorrect and 1 means correct
+        accuracy: 0,    // The user's total score, as a decimal
+        allDone: false, // Whether the 'ShowEnd' component should be displayed
+        rationales: [], // An array of the user's rationales
+        selfAssess: 1   // The user's rating of how their rationale matches the gold standard
+    };
+    // Labels for Exemplar judgments
+    levelTitles = {
+        1: "Less Skilled",
+        2: "Proficient",
+        3: "Master"
+    };
 
     /**
      * handleChoice: calculates judg_time and correct, updates state
      * Parameters: optionNum, the numerical value of the judgment; option, the text value
      * Fires: when the user clicks a 'judgment' button
      */
-    handleChoice(optionNum, option) {
+    handleChoice = (optionNum, option) => {
         // Calculate time from task load to option selected
         const endDate = Date.now();
         const endTime = Math.floor(endDate / 1000);
@@ -70,16 +61,14 @@ class JudgmentApp extends Component {
         }
 
         // Update state
-        this.setState((prevState) => {
-            return {
-                choice: option,
-                choiceNum: optionNum,
-                judgTime: judgTime,
-                rationStart: endTime,
-                ratVisible: true,
-                scores: prevState.scores.concat(correct)
-            };
-        });
+        this.setState((prevState) => ({
+            choice: option,
+            choiceNum: optionNum,
+            judgTime: judgTime,
+            rationStart: endTime,
+            ratVisible: true,
+            scores: prevState.scores.concat(correct)
+        }));
     }
 
     /**
@@ -87,7 +76,7 @@ class JudgmentApp extends Component {
      * Parameter: rationale, the user-inputted rationale
      * Fires: when 'Enter Rationale' is clicked
      */
-    handleRationale(rationale) {
+    handleRationale = (rationale) => {
         // Verify rationale
         if (!rationale) {
             return "Enter a valid rationale";
@@ -102,14 +91,12 @@ class JudgmentApp extends Component {
         const rationTime = endTime - this.state.rationStart;
 
         // Update state
-        this.setState(prevState => {
-            return {
-                rationTime: rationTime,
-                rationales: prevState.rationales.concat(rationale),
-                fbVisible: true,
-                ratVisible: false
-            };
-        });
+        this.setState(prevState => ({
+            rationTime: rationTime,
+            rationales: prevState.rationales.concat(rationale),
+            fbVisible: true,
+            ratVisible: false
+        }));
     }
 
     /**
@@ -117,12 +104,8 @@ class JudgmentApp extends Component {
      * Parameter: choice, the user's rating of how their rationale matches the gold standard
      * Fires: when the user clicks a 'rating' button
      */
-    handleSelfAssess(choice) {
-        this.setState(() => {
-            return {
-                selfAssess: choice
-            };
-        });
+    handleSelfAssess = (choice) => {
+        this.setState(() => ({selfAssess: choice}));
     }
     
     /**
@@ -131,24 +114,18 @@ class JudgmentApp extends Component {
      * Parameters: none
      * Fires: when the user clicks the 'Next' button
      */
-    handleNext() {
+    handleNext = () => {
         // Check whether the user has finished all the trials
         if (this.state.trial < nTrials) {
-            this.setState((prevState) => {
-                return {
-                    trial: prevState.trial + 1
-                };
-            },
-                this.getCase
+            this.setState((prevState) => ({trial: prevState.trial + 1}),
+            this.getCase
             );
         } else {
             let response = this.saveResults();
-            this.setState(() => {
-                return {
-                    allDone: true,
-                    accuracy: response
-                };
-            });
+            this.setState(() => ({
+                allDone: true,
+                accuracy: response
+            }));
         }
 
         // Save to DB
@@ -180,11 +157,7 @@ class JudgmentApp extends Component {
         // Set new start time
         const newStartDate = Date.now();
         const newStartTime = Math.floor(newStartDate / 1000);
-        this.setState(() => {
-            return {
-                startTime: newStartTime
-            };
-        })
+        this.setState(() => ({startTime: newStartTime}));
     }
 
     /**
@@ -192,13 +165,11 @@ class JudgmentApp extends Component {
      * Parameters: none
      * Fires: inside handleNext
      */
-    getCase() {
-        this.setState(() => {
-            return {
-                exId: exObj.exIds[this.state.trial - 1],
-                fbVisible: false
-            };
-        });
+    getCase = () => {
+        this.setState(() => ({
+            exId: exObj.exIds[this.state.trial - 1],
+            fbVisible: false
+        }));
     }
 
     /**
@@ -207,7 +178,7 @@ class JudgmentApp extends Component {
      * Parameters: none
      * Fires: inside handleNext
      */
-    saveResults() {
+    saveResults = () => {
         jQuery.ajax({
             url : exObj.ajax_url,
             type : 'post',
@@ -231,7 +202,7 @@ class JudgmentApp extends Component {
      * Parameters: none
      * Fires: after the component changes
      */
-    componentDidUpdate() {
+    componentDidUpdate = () => {
         if ( document.getElementById("rationale") ) {
             const elDiv = document.getElementById("rationale");
             elDiv.scrollIntoView();

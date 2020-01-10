@@ -1,26 +1,20 @@
 const { Component } = wp.element;
 
 class Rationale extends Component {
-    constructor(props) {
-        super(props);
-        this.handleRationaleObj = this.handleRationaleObj.bind(this);
-        this.state = {
-            error: undefined
-        };
-    }
-
-    handleRationaleObj(e) {
+    state = {error: undefined};
+    /**
+     * handleRationaleObj: cleans the user's rationale and updates state
+     * Parameter: e, the user's input
+     * Fires: when the user presses 'Enter Rationale'
+     */
+    handleRationaleObj = (e) => {
         // e is event object
         e.preventDefault();
 
        const rationale = e.target.elements.rationale.value.trim();
        const error = this.props.handleRationale(rationale);
 
-        this.setState(() => {
-            // same as error: error (state being updated by the const)
-            return { error };
-        });
-
+        this.setState(() => ({error}));
     };
     render() {
         return (
