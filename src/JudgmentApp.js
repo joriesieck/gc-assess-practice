@@ -22,7 +22,6 @@ class JudgmentApp extends Component {
         choiceNum: 0,   // Number of the user's judgment
         startTime: Math.floor(this.startDate / 1000),    // UNIX time on page load, in seconds
         judgTime: 0,    // Time from page load to judgment made, in seconds
-        rationStart: 0, // UNIX time on judgment made
         rationTime: 0,  // Time from judgment made to rationale submitted, in seconds
         fbVisible: false,   // Whether the 'ShowFeedback' component should be displayed
         ratVisible: false,  // Whether the 'Rationale' component should be displayed
@@ -64,8 +63,8 @@ class JudgmentApp extends Component {
         this.setState((prevState) => ({
             choice: option,
             choiceNum: optionNum,
+            startTime: endTime,
             judgTime: judgTime,
-            rationStart: endTime,
             ratVisible: true,
             scores: prevState.scores.concat(correct)
         }));
@@ -88,7 +87,7 @@ class JudgmentApp extends Component {
         // Calculate time from task load to rationale submitted
         const endDate = Date.now();
         const endTime = Math.floor(endDate / 1000);
-        const rationTime = endTime - this.state.rationStart;
+        const rationTime = endTime - this.state.startTime;
 
         // Update state
         this.setState(prevState => ({
