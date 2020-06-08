@@ -22,8 +22,6 @@ function register_cpt_exemplar() {
         'labels' => $labels,
         'public' => true,
         'taxonomies' => array('category'),
-        'show_in_rest' => true,
-        'supports' => array('editor')
     );
     register_post_type('exemplar',$args);
 }
@@ -48,8 +46,6 @@ function register_cpt_competency() {
         'labels' => $labels,
         'public' => true,
         'taxonomies' => array('category'),
-        'show_in_rest' => true,
-        'supports' => array('editor')
     );
 
     register_post_type('competency',$args);
@@ -75,8 +71,6 @@ function register_cpt_scenario() {
         'labels' => $labels,
         'public' => true,
         'taxonomies' => array('category'),
-        'show_in_rest' => true,
-        'supports' => array('editor')
     );
 
     register_post_type('scenario',$args);

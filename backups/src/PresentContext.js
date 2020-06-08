@@ -1,4 +1,4 @@
-import ReactHtmlParser from 'react-html-parser';
+
 
 // import { Panel, PanelBody, PanelRow } from '@wordpress/components';
 // const { Panel, PanelBody, PanelRow } = wp.components;
@@ -32,7 +32,7 @@ function PresentContext(props) {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Typography className={classes.heading}>
-                        {ReactHtmlParser(props.scenario)}
+                        {props.scenario}
                     </Typography>
                 </ExpansionPanelDetails>
             </ExpansionPanel>
@@ -42,7 +42,7 @@ function PresentContext(props) {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Typography className={classes.heading}>
-                        {ReactHtmlParser(props.competencies[0])}
+                        {props.competencies[0]}
                     </Typography>
                 </ExpansionPanelDetails>
             </ExpansionPanel>
@@ -52,7 +52,7 @@ function PresentContext(props) {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Typography className={classes.heading}>
-                        {ReactHtmlParser(props.competencies[3])}
+                        {props.competencies[3]}
                     </Typography>
                 </ExpansionPanelDetails>
             </ExpansionPanel>
@@ -62,7 +62,7 @@ function PresentContext(props) {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Typography className={classes.heading}>
-                        {ReactHtmlParser(props.competencies[2])}
+                        {props.competencies[2]}
                     </Typography>
                 </ExpansionPanelDetails>
             </ExpansionPanel>
@@ -72,7 +72,7 @@ function PresentContext(props) {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Typography className={classes.heading}>
-                        {ReactHtmlParser(props.competencies[1])}
+                        {props.competencies[1]}
                     </Typography>
                 </ExpansionPanelDetails>
             </ExpansionPanel>

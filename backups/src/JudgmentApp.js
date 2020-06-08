@@ -32,7 +32,6 @@ class JudgmentApp extends Component {
         allDone: false, // Whether the 'ShowEnd' component should be displayed
         rationales: [], // An array of the user's rationales
         selfAssess: [], // The user's ratings of how their rationale matches the gold standard
-        avgAssess: 0    // The user's average self-assessment
     };
     // Labels for Exemplar judgments
     levelTitles = {
@@ -109,12 +108,7 @@ class JudgmentApp extends Component {
      * Fires: when the user clicks a 'rating' button
      */
     handleSelfAssess = (choice) => {
-        // Convert the user's self rating to an integer
-        const intChoice = parseInt(choice, 10);
-        if(intChoice==0) {
-            return "Please select a rating.";
-        }
-        this.setState((prevState) => ({selfAssess: prevState.selfAssess.concat(intChoice)}));
+        this.setState((prevState) => ({selfAssess: prevState.selfAssess.concat(choice)}));
     }
     
     /**
@@ -136,15 +130,10 @@ class JudgmentApp extends Component {
             // Calculate the final score
             const scoreSum = this.state.scores.reduce(((a,b)=>a+b),0);
             const finalScore = Math.floor((scoreSum / this.state.scores.length)*100);
-            // Calculate the average self rating
-            const assessSum = this.state.selfAssess.reduce(((a,b)=>a+b),0);
-            const avgAssessFloat = assessSum / (this.state.selfAssess.length);
-            const avgAssess = Math.round( avgAssessFloat * 100 + 32 * Number.EPSILON ) / 100;
             this.setState(() => ({
                 allDone: true,
                 accuracy: finalScore,
-                caVisible: false,
-                avgAssess: avgAssess
+                caVisible: false
             }));
         }
 
@@ -213,7 +202,6 @@ class JudgmentApp extends Component {
                 { this.state.allDone && 
                     <ShowEnd 
                         score={this.state.accuracy}
-                        avgAssess={this.state.avgAssess}
                     /> 
                 }
                 {!this.state.allDone &&
